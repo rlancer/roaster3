@@ -84,10 +84,11 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    console.log('jokes', completionsRoast.choices[0].message);
+    const jokes = JSON.parse(completionsRoast.choices[0].message.content!)
+    console.log(jokes);
 
 
-    return NextResponse.json(completions);
+    return NextResponse.json(jokes);
   } catch (error) {
     console.error('OpenAI API error:', error);
     return NextResponse.json(error);
