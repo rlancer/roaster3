@@ -1,7 +1,7 @@
 # GPT Workshop 2024 (React/Node/NextJS Starter Code)
 
 ## Installation
-_This was tested with Node 20, this may work with other versions of node, but can't be guaranteed. If you have a node version manager (nvm/nodenv) feel free to switch to 20_
+_This was tested with Node 20, this may work with other versions of node, but can't be guaranteed. If you have a node version manager (nvm/nodenv) to switch to 20 for best results_
 
 After cloning run
 
