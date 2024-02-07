@@ -93,7 +93,7 @@ export default function Vision() {
 
       <div style={{ maxWidth: '600px' }}>
         {base64 && (
-          <img src={base64} style={{ maxWidth: 500 }} alt="Uploaded Image" />
+          <img src={base64} style={{ maxWidth: 800 }} alt="Uploaded Image" />
         )}
       </div>
 
@@ -105,7 +105,7 @@ export default function Vision() {
       </div>}
 
 
-      {response && <>{response.people.map(r =>
+      {!loading && response && <>{response.people.map(r =>
         <div key={r.position} style={{ marginTop: '1rem' }}>
           <div style={{ fontWeight: 'bold' }}>{r.position} &middot; {r.short_visual_description}</div>
           <div>{r.joke}</div>
