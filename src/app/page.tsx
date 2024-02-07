@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { useState } from 'react';
+import { ColorRing } from 'react-loader-spinner'
 
 type OpenAIResponse = {
   choices: {
@@ -37,20 +38,25 @@ type JokesResponse = {
   people: Poeple[]
 }
 
-// {\n' +
-//     '  "people": [\n' +
-//     '    {\n' +
-//     '      "short_visual_description": "Wears printed top",\n' +
-//     `      "joke": "Looks like someone raided their grandma's closet and thought, 'Vintage chic!' More like vintage shriek when she sees you've turned her favorite tablecloth into a top!",\n` +
-//     '      "position": "Left"\n' +
-//     '    }
-
 export default function Vision() {
   const [response, setResponse] = useState<JokesResponse | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState<string>('');
   const [base64, setBase64] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
+
+  const roast = async (base64: string) => {
+    setLoading(true);
+
+    const res = await axios.post<JokesResponse>('/api/vision', {
+      base64,
+      prompt
+    });
+
+    setResponse(res.data);
+    setLoading(false);
+  }
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -60,55 +66,49 @@ export default function Vision() {
     setFile(e.target.files[0]);
     const base64 = await toBase64(e.target.files[0] as File);
     setBase64(base64 as string);
+
+    await roast(base64 as string)
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
-    if (!file) {
-      return;
-    }
-
-    const base64 = await toBase64(file as File);
-    setBase64(base64 as string);
-
-    const res = await axios.post<JokesResponse>('/api/vision', {
-      base64,
-      prompt
-    });
-    console.log('data', res.data);
-    setResponse(res.data);
-  };
 
   const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.currentTarget.value = "";
   };
-  console.log('response', response);
 
   return (
     <div className="page-container">
-      <h1>An Attentive Roaster </h1>
-      <p>Upload a photo of people to roast</p>
+      <h1>AI Roaster </h1>
+      <p>Upload a photo with people</p>
       <br />
-      <hr />
+
+
       <br />
-      <form method="POST" encType="multipart/form-data" onSubmit={handleFormSubmit}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={onFileChange}
-          onClick={onClick}
-        />
-        <button type="submit">Upload</button>
-      </form>
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={onFileChange}
+        onClick={onClick}
+      />
+
+
       <div style={{ maxWidth: '600px' }}>
         {base64 && (
           <img src={base64} alt="Uploaded Image" />
         )}
       </div>
 
+      {loading && <div>
+
+        <p>roasting ...</p>
+        <iframe src="https://giphy.com/embed/1AunKpz3cdCpy" width="480" height="362" frameBorder="0" className="giphy-embed" ></iframe>
+
+      </div>}
+
+
       {response && <>{response.people.map(r =>
-        <div style={{ marginTop: '1rem' }}>
+        <div key={r.position} style={{ marginTop: '1rem' }}>
           <div style={{ fontWeight: 'bold' }}>{r.position} &middot; {r.short_visual_description}</div>
           <div>{r.joke}</div>
         </div>

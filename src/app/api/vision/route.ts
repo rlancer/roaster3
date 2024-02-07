@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
         },
         {
           role: 'assistant',
-          content: `For each Person in the array of 'people', take the 'long_visual_description' field and create a light hearted insult.
+          content: `For each Person in the array of 'people', take the 'long_visual_description' field and create an insult.
 
           The response should be in following JSON format:
 
