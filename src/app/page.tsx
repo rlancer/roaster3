@@ -32,6 +32,7 @@ type Poeple = {
   short_visual_description: string
   joke: string
   position: string
+  nickname: string
 }
 
 type JokesResponse = {
@@ -107,7 +108,8 @@ export default function Vision() {
 
       {!loading && response && <>{response.people.map(r =>
         <div key={r.position} style={{ marginTop: '1rem' }}>
-          <div style={{ fontWeight: 'bold' }}>{r.position} &middot; {r.short_visual_description}</div>
+          <div style={{ fontWeight: 'bold' }}>{r.nickname}</div>
+          <div style={{ color: '#aaa' }}>{r.position} &middot; {r.short_visual_description}</div>
           <div>{r.joke}</div>
         </div>
       )}</>}

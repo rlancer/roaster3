@@ -61,17 +61,16 @@ export async function POST(req: NextRequest) {
         },
         {
           role: 'assistant',
-          content: `For each Person in the array of 'people', take the 'long_visual_description' field and create an insult.
-
-          The response should be in following JSON format:
+          content: `For each Person in the array of 'people' populate the response as:
 
           {
             "people":
             [
               {
                 "short_visual_description": "same value from the input",
-                "joke": "the joke based on the 'long_visual_description' from the input",
-                "position": "the same value from the input"
+                "joke": "a spicy insult based on the 'long_visual_description' from the input",
+                "position": "the same value from the input",
+                "nickname": "a nickname no greater than 3 words based on the spicy insult in the 'joke' field"
               }
             ]
           }
