@@ -41,7 +41,6 @@ type JokesResponse = {
 export default function Vision() {
   const [response, setResponse] = useState<JokesResponse | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [prompt, setPrompt] = useState<string>('');
   const [base64, setBase64] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -51,8 +50,7 @@ export default function Vision() {
 
     const res = await axios.post<JokesResponse>('/api/vision', {
       base64,
-      prompt
-    });
+    }, { timeout: 60 * 1000 * 2 });
 
     setResponse(res.data);
     setLoading(false);
