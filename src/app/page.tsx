@@ -93,7 +93,7 @@ export default function Vision() {
 
       <div style={{ maxWidth: '600px' }}>
         {base64 && (
-          <img src={base64} alt="Uploaded Image" />
+          <img src={base64} style={{ maxWidth: 500 }} alt="Uploaded Image" />
         )}
       </div>
 
