@@ -7,8 +7,6 @@ const openai = new OpenAI({
   organization: process.env.OPENAI_ORG_ID,
 });
 
-export const runtime = 'edge'
-
 export async function POST(req: NextRequest) {
   const { messages } = await req.json();
   try {
