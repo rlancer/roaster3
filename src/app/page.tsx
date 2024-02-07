@@ -1,8 +1,7 @@
 'use client'
 
 import axios from 'axios';
-import { useState } from 'react';
-import { ColorRing } from 'react-loader-spinner'
+import { useState, useRef, ReactHTMLElement } from 'react';
 
 type OpenAIResponse = {
   choices: {
@@ -40,6 +39,7 @@ type JokesResponse = {
 }
 
 export default function Vision() {
+  const loadingRef = useRef<any>(null);
   const [response, setResponse] = useState<JokesResponse | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [base64, setBase64] = useState<string | null>(null);
@@ -49,9 +49,17 @@ export default function Vision() {
   const roast = async (base64: string) => {
     setLoading(true);
 
+    setTimeout(() => {
+      if (loadingRef.current) {
+        loadingRef.current.scrollTo({
+          behavior: "smooth"
+        });
+      }
+    }, 500);
+
     const res = await axios.post<JokesResponse>('/api/vision', {
       base64,
-    }, { timeout: 60 * 1000 * 2 });
+    }, { timeout: 60 * 1000 * 4 });
 
     setResponse(res.data);
     setLoading(false);
@@ -76,13 +84,11 @@ export default function Vision() {
   };
 
   return (
-    <div className="page-container">
+    <div style={{ display: 'flex', margin: '0 auto', padding:'1rem', flexDirection: 'column', maxWidth: '800px', gap: '1rem' }}>
+
+
       <h1>AI Roaster </h1>
       <p>Upload a photo with people</p>
-      <br />
-
-
-      <br />
 
       <input
         type="file"
@@ -92,13 +98,13 @@ export default function Vision() {
       />
 
 
-      <div style={{ maxWidth: '600px' }}>
+      <div>
         {base64 && (
-          <img src={base64} style={{ maxWidth: 800 }} alt="Uploaded Image" />
+          <img src={base64} style={{ maxWidth: '100%' }} alt="Uploaded Image" />
         )}
       </div>
 
-      {loading && <div>
+      {loading && <div ref={loadingRef}>
 
         <p>roasting ...</p>
         <iframe src="https://giphy.com/embed/1AunKpz3cdCpy" width="480" height="362" frameBorder="0" className="giphy-embed" ></iframe>
