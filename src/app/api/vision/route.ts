@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     const completionsRoast = await openai.chat.completions.create({
       response_format:{type:'json_object'},
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-3.5-turbo-0125',
       messages: [
         {
           role: "system",
